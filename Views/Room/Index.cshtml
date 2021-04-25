@@ -6,8 +6,57 @@
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-
+        $("#btnSave").click(function () {
+            SaveRoomData();
+        });
     });
+
+    function SaveRoomData() {
+        var formData = new FormData();
+        formData.append("RoomNumber", $("#txtRoomNumber").val());
+        formData.append("RoomPrice", $("#txtRoomPrice").val());
+        formData.append("BookingStatusId", $("#ddBookingStatus").val());
+        formData.append("RoomTypeId", $("#ddRoomType").val());
+        formData.append("RoomCapacity", $("#txtRoomCapacity").val());
+        formData.append("RoomDescription", $("#txtRoomDescription").val());
+        formData.append("Image", $("#UploadImage").get(0).files[0]);   
+
+       
+
+        $.ajax({
+            //url: '/getdata',
+            async: true,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (data) {
+                if (data.success === true) {
+                    alert(data.message);
+                }
+                ResetRoomInformation();
+                //console.log("Room Numer: ", formData.get('RoomNumber'));
+
+                //alert("Succes")
+            },
+            error: function () {
+                alert('There is some problem processing your request. Please try after some time');
+            }
+        });
+       
+    }
+
+    function ResetRoomInformation() {
+        $("#txtRoomNumber").val('');
+        $("#txtRoomPrice").val('');
+        $("#ddBookingStatus").val(1);
+        $("#ddRoomType").val(1);
+        $("#txtRoomCapacity").val('');
+        $("#txtRoomDescription").val('');
+        $("#UploadImage").val('');
+        $("#txtRoomNumber").focus();
+        $("#imgRoom").removeAttr('src');
+    }
 
     function DisplayImage(result) {
         if (result.files && result.files[0]) {
@@ -37,32 +86,32 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             @Html.LabelFor(model => model.RoomNumber)
-                            @Html.TextBoxFor(model => model.RoomNumber, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.RoomNumber, new { @class = "form-control", id = "txtRoomNumber" })
                         </div>
                         <div class="form-group col-md-6">
                             @Html.LabelFor(model => model.RoomPrice)
-                            @Html.TextBoxFor(model => model.RoomPrice, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.RoomPrice, new { @class = "form-control", id = "txtRoomPrice" })
                         </div>
 
                         <div class="form-group col-md-6">
                             @Html.LabelFor(model => model.BookingStatusId)
-                            @Html.DropDownListFor(model => model.BookingStatusId, @Model.ListOfBookingStatus, new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.BookingStatusId, @Model.ListOfBookingStatus, new { @class = "form-control", id = "ddBookingStatus" })
                         </div>
                         <div class="form-group col-md-6">
                             @Html.LabelFor(model => model.RoomTypeId)
-                            @Html.DropDownListFor(model => model.RoomTypeId, @Model.ListOfRoomType, new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.RoomTypeId, @Model.ListOfRoomType, new { @class = "form-control", id = "ddRoomType" })
                         </div>
                         <div class="form-group col-md-6">
                             @Html.LabelFor(model => model.RoomCapacity)
-                            @Html.TextBoxFor(model => model.RoomCapacity, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.RoomCapacity, new { @class = "form-control", id = "txtRoomCapacity" })
                         </div>
                         <div class="form-group col-md-6 ">
                             @Html.LabelFor(model => model.RoomDescription)
-                            @Html.TextBoxFor(model => model.RoomDescription, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.RoomDescription, new { @class = "form-control", id = "txtRoomDescription" })
                         </div>
                         <div class="form-group col-md-6">
                             @Html.LabelFor(model => model.RoomImage)
-                            <input type="file" class="form-control" name="roomImage" title="Load Image" onchange="DisplayImage(this)" style="margin-bottom:10px;" />
+                            <input type="file" id="UploadImage" class="form-control" name="roomImage" title="Load Image" onchange="DisplayImage(this)" style="margin-bottom:10px;" />
                             <img id="imgRoom" height="150" width="150" style="border:solid" />
                         </div>
                     </div>
@@ -71,7 +120,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success">Save</button>&nbsp;
+                <button type="button" id="btnSave" class="btn btn-success">Save</button>&nbsp;
                 <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
             </div>
         </div>
