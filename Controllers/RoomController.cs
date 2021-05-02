@@ -60,5 +60,25 @@ namespace WebAppHotelManagement.Controllers
             objHotelDBEntities.SaveChanges();
             return Json(new { message = "Room Successfully Added", success = true}, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetAllRooms()
+        {
+            IEnumerable<RoomDetailsViewModel> listOfRoomDetailsViewModels =
+                (from objRoom in objHotelDBEntities.Rooms
+                 join objBooking in objHotelDBEntities.BookingStatus on objRoom.BookingStatusId equals objBooking.BookingStatusId
+                 join objRoomType in objHotelDBEntities.RoomTypes on objRoom.RoomTypeId equals objRoomType.RoomTypeId
+                 select new RoomDetailsViewModel()
+                 {
+                     RoomNumber = objRoom.RoomNumber,
+                     RoomDescription = objRoom.RoomDescription,
+                     RoomCapacity = objRoom.RoomCapacity,
+                     RoomPrice = objRoom.RoomPrice,
+                     BookingStatus = objBooking.BookingStatus,
+                     RoomType = objRoomType.RoomTypeName,
+                     RoomImage = objRoom.RoomImage,
+                     RoomId = objRoom.RoomId
+                 }).ToList();
+            return PartialView("_RoomDetailsPartial", listOfRoomDetailsViewModels);
+        }
     }
 }

@@ -76,8 +76,8 @@ C:\Users\pawan\source\repos\WebAppHotelManagement\bin\System.Web.WebPages.Razor.
 C:\Users\pawan\source\repos\WebAppHotelManagement\bin\Newtonsoft.Json.xml
 C:\Users\pawan\source\repos\WebAppHotelManagement\bin\Antlr3.Runtime.pdb
 C:\Users\pawan\source\repos\WebAppHotelManagement\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\pawan\source\repos\WebAppHotelManagement\obj\Debug\WebAppHotelManagement.csprojAssemblyReference.cache
 C:\Users\pawan\source\repos\WebAppHotelManagement\obj\Debug\WebAppHotelManagement.csproj.CoreCompileInputs.cache
 C:\Users\pawan\source\repos\WebAppHotelManagement\obj\Debug\WebAppHotelManagement.csproj.CopyComplete
 C:\Users\pawan\source\repos\WebAppHotelManagement\obj\Debug\WebAppHotelManagement.dll
 C:\Users\pawan\source\repos\WebAppHotelManagement\obj\Debug\WebAppHotelManagement.pdb
+C:\Users\pawan\source\repos\WebAppHotelManagement\obj\Debug\WebAppHotelManagement.csprojAssemblyReference.cache

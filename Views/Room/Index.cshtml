@@ -5,11 +5,31 @@
 
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
+        LoadRoomDetails();
         $("#btnSave").click(function () {
             SaveRoomData();
         });
     });
+
+    function LoadRoomDetails() {
+        $("#divLoadRoomDetails")
+
+        $.ajax({
+            async: true,
+            data: 'GET',
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: '/Room/GetAllRooms',
+            success: function (data) {
+                $("#divLoadRoomDetails").html(data)
+            },
+            error: function () {
+                alert('There is some problem to your request');
+            }
+        });
+    }
 
     function SaveRoomData() {
         var formData = new FormData();
@@ -69,7 +89,7 @@
     }
 </script>
 
-<div style="margin-top:50px;">
+<div style="margin-top:20px;">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#divAddRoom" data-backdrop="static" data-keyboard="false">Add Room</button>
 </div>
 
@@ -125,6 +145,12 @@
             </div>
         </div>
     </div>
+</div>
+
+<div style="margin-top: 10px"></div>
+
+<div id="divLoadRoomDetails">
+
 </div>
 
 
