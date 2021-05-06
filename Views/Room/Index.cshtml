@@ -7,10 +7,61 @@
 <script type="text/javascript">
     $(document).ready(function () {
         LoadRoomDetails();
+        $("#txtRoomId").val("0");
         $("#btnSave").click(function () {
             SaveRoomData();
         });
     });
+
+    function DeleteRoom(roomId) {
+        if (confirm("Are you sure you want to delete ?")) {
+            $.ajax({
+                async: true,
+                type: 'GET',
+                dataType: 'JSON',
+                contentType: 'application/json; charset=utf-8',
+                data: { roomId: roomId },
+                url: '/Room/DeleteRoomDetails',
+                success: function (data) {
+                    if (data.success === true) {
+
+                        window.location.reload();
+                    }                    
+                },
+                error: function () {
+                    alert('There is some problem processing your data. Please try after some time ');
+                },
+            });
+        }
+       
+    }
+
+    function EditRoom(roomId) {
+        $.ajax({
+            async: true,
+            type: 'GET',
+            dataType: 'JSON',
+            contentType: 'application/json; charset=utf-8',
+            data: { roomId: roomId },
+            url: '/Room/EditRoomDetails',
+            success: function (data) {
+                console.log(data);
+                $("#txtRoomNumber").val(data.RoomNumber);
+                $("#txtRoomPrice").val(data.RoomPrice);
+                $("#ddBookingStatus").val(data.BookingStatusId);
+                $("#ddRoomType").val(data.RoomTypeId);
+                $("#txtRoomCapacity").val(data.RoomCapacity);
+                $("#txtRoomDescription").val(data.RoomDescription);
+                $("#imgRoom").attr('src', "../RoomImages/" + data.RoomImage);
+                $("#divAddRoom").modal({ show: true });
+                $("#txtRoomId").val(data.RoomId);
+                $("#btnSave").text("Update");
+            },
+            error: function () {
+                alert('There is some problem to process your request');
+            }
+        });
+    }
 
     function LoadRoomDetails() {
         $("#divLoadRoomDetails")
@@ -33,13 +84,14 @@
 
     function SaveRoomData() {
         var formData = new FormData();
+        formData.append("RoomId", $("#txtRoomId").val());
         formData.append("RoomNumber", $("#txtRoomNumber").val());
         formData.append("RoomPrice", $("#txtRoomPrice").val());
         formData.append("BookingStatusId", $("#ddBookingStatus").val());
         formData.append("RoomTypeId", $("#ddRoomType").val());
         formData.append("RoomCapacity", $("#txtRoomCapacity").val());
         formData.append("RoomDescription", $("#txtRoomDescription").val());
-        formData.append("Image", $("#UploadImage").get(0).files[0]);   
+        formData.append("Image", $("#UploadImage").get(0).files[0]);
 
        
 
@@ -53,8 +105,10 @@
             success: function (data) {
                 if (data.success === true) {
                     alert(data.message);
+                    ResetRoomInformation();
+                    LoadRoomDetails();
                 }
-                ResetRoomInformation();
+                
                 //console.log("Room Numer: ", formData.get('RoomNumber'));
 
                 //alert("Succes")
@@ -76,6 +130,9 @@
         $("#UploadImage").val('');
         $("#txtRoomNumber").focus();
         $("#imgRoom").removeAttr('src');
+        $("#txtRoomId").val(0);
+        $("#btnSave").val("Save");
+
     }
 
     function DisplayImage(result) {
@@ -101,8 +158,9 @@
                 <h4 class="modal-title">Room</h4>
             </div>
             <div class="modal-body">
-                <div class="container-fluid">
 
+                <div class="container-fluid">
+                    @Html.HiddenFor(model => model.RoomId, new {id = "txtRoomId" })
                     <div class="row">
                         <div class="form-group col-md-6">
                             @Html.LabelFor(model => model.RoomNumber)

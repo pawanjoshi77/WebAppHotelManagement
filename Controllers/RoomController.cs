@@ -39,26 +39,56 @@ namespace WebAppHotelManagement.Controllers
         [HttpPost]
         public ActionResult Index(RoomViewModel objRoomViewModel)
         {
-            string ImageUniqueName = Guid.NewGuid().ToString();
-            string ActualImageName = ImageUniqueName + Path.GetExtension(objRoomViewModel.Image.FileName);
-
-            objRoomViewModel.Image.SaveAs(Server.MapPath("~/RoomImages/" + ActualImageName));
-            //objHotelDBEntities
-            Room objRoom = new Room()
+            String message = String.Empty;
+            String ImageUniqueName = String.Empty;
+            String ActualImageName = String.Empty;
+            if (objRoomViewModel.RoomId == 0)
             {
-                RoomNumber = objRoomViewModel.RoomNumber,
-                RoomDescription = objRoomViewModel.RoomDescription,
-                RoomPrice = objRoomViewModel.RoomPrice,
-                BookingStatusId = objRoomViewModel.BookingStatusId,
-                isActive = true,
-                RoomImage = ActualImageName,
-                RoomCapacity = objRoomViewModel.RoomCapacity,
-                RoomTypeId = objRoomViewModel.RoomTypeId,
+                ImageUniqueName = Guid.NewGuid().ToString();
+                ActualImageName = ImageUniqueName + Path.GetExtension(objRoomViewModel.Image.FileName);
 
-            };
-            objHotelDBEntities.Rooms.Add(objRoom);
+                objRoomViewModel.Image.SaveAs(Server.MapPath("~/RoomImages/" + ActualImageName));
+               
+                Room objRoom = new Room()
+                {
+                    RoomNumber = objRoomViewModel.RoomNumber,
+                    RoomDescription = objRoomViewModel.RoomDescription,
+                    RoomPrice = objRoomViewModel.RoomPrice,
+                    BookingStatusId = objRoomViewModel.BookingStatusId,
+                    isActive = true,
+                    RoomImage = ActualImageName,
+                    RoomCapacity = objRoomViewModel.RoomCapacity,
+                    RoomTypeId = objRoomViewModel.RoomTypeId,
+                    
+                };
+                objHotelDBEntities.Rooms.Add(objRoom);
+                message = "Added";
+            }
+            else
+            {
+                Room objRoom = objHotelDBEntities.Rooms.Single(model => model.RoomId == objRoomViewModel.RoomId);
+                if ( objRoomViewModel.Image != null)
+                {
+                     ImageUniqueName = Guid.NewGuid().ToString();
+                     ActualImageName = ImageUniqueName + Path.GetExtension(objRoomViewModel.Image.FileName);
+                     objRoomViewModel.Image.SaveAs(Server.MapPath("~/RoomImages/" + ActualImageName));
+                     objRoom.RoomImage = ActualImageName;
+
+                }
+                objRoom.RoomNumber = objRoomViewModel.RoomNumber;
+                objRoom.RoomDescription = objRoomViewModel.RoomDescription;
+                objRoom.RoomPrice = objRoomViewModel.RoomPrice;
+                objRoom.BookingStatusId = objRoomViewModel.BookingStatusId;
+                objRoom.isActive = true;
+                objRoom.RoomCapacity = objRoomViewModel.RoomCapacity;
+                objRoom.RoomTypeId = objRoomViewModel.RoomTypeId;
+                message = "Updated";
+            }
+            
+
+           
             objHotelDBEntities.SaveChanges();
-            return Json(new { message = "Room Successfully Added", success = true}, JsonRequestBehavior.AllowGet);
+            return Json(new { message = "Room Successfully " + message, success = true}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetAllRooms()
@@ -67,6 +97,7 @@ namespace WebAppHotelManagement.Controllers
                 (from objRoom in objHotelDBEntities.Rooms
                  join objBooking in objHotelDBEntities.BookingStatus on objRoom.BookingStatusId equals objBooking.BookingStatusId
                  join objRoomType in objHotelDBEntities.RoomTypes on objRoom.RoomTypeId equals objRoomType.RoomTypeId
+                 where objRoom.isActive == true
                  select new RoomDetailsViewModel()
                  {
                      RoomNumber = objRoom.RoomNumber,
@@ -79,6 +110,22 @@ namespace WebAppHotelManagement.Controllers
                      RoomId = objRoom.RoomId
                  }).ToList();
             return PartialView("_RoomDetailsPartial", listOfRoomDetailsViewModels);
+        }
+        
+        [HttpGet]
+        public JsonResult EditRoomDetails(int roomId)
+        {
+            var result = objHotelDBEntities.Rooms.Single(model => model.RoomId == roomId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult DeleteRoomDetails(int roomId)
+        {
+            Room objRoom = objHotelDBEntities.Rooms.Single(model => model.RoomId == roomId);
+            objRoom.isActive = false;
+            objHotelDBEntities.SaveChanges();
+            return Json(new { message = "Record successfully deleted.", success = true }, JsonRequestBehavior.AllowGet);
         }
     }
 }
