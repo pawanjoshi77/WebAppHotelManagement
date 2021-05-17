@@ -22,5 +22,6 @@ namespace WebAppHotelManagement.Models
         public int AssignRoomId { get; set; }
         public int NoOfMembers { get; set; }
         public decimal TotalAmount { get; set; }
+        public string CustomerPhone { get; set; }
     }
 }

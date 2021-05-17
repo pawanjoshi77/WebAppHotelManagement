@@ -15,6 +15,7 @@
     <EntitySetMapping Name="RoomBookings">
       <EntityTypeMapping TypeName="HotelDBModel.RoomBooking">
         <MappingFragment StoreEntitySet="RoomBookings">
+          <ScalarProperty Name="CustomerPhone" ColumnName="CustomerPhone" />
           <ScalarProperty Name="BookingId" ColumnName="BookingId" />
           <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
           <ScalarProperty Name="CustomerAddress" ColumnName="CustomerAddress" />

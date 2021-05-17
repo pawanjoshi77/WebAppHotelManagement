@@ -27,6 +27,7 @@
           <Property Name="AssignRoomId" Type="int" Nullable="false" />
           <Property Name="NoOfMembers" Type="int" Nullable="false" />
           <Property Name="TotalAmount" Type="decimal" Precision="20" Scale="2" Nullable="false" />
+          <Property Name="CustomerPhone" Type="varchar" MaxLength="12" />
         </EntityType>
         <EntityType Name="Rooms">
           <Key>
@@ -97,6 +98,7 @@
           <Property Name="AssignRoomId" Type="Int32" Nullable="false" />
           <Property Name="NoOfMembers" Type="Int32" Nullable="false" />
           <Property Name="TotalAmount" Type="Decimal" Precision="20" Scale="2" Nullable="false" />
+          <Property Name="CustomerPhone" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Room">
           <Key>
@@ -161,6 +163,7 @@
           <EntitySetMapping Name="RoomBookings">
             <EntityTypeMapping TypeName="HotelDBModel.RoomBooking">
               <MappingFragment StoreEntitySet="RoomBookings">
+                <ScalarProperty Name="CustomerPhone" ColumnName="CustomerPhone" />
                 <ScalarProperty Name="BookingId" ColumnName="BookingId" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerAddress" ColumnName="CustomerAddress" />

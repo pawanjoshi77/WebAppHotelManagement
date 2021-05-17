@@ -22,6 +22,7 @@
     <Property Name="AssignRoomId" Type="Int32" Nullable="false" />
     <Property Name="NoOfMembers" Type="Int32" Nullable="false" />
     <Property Name="TotalAmount" Type="Decimal" Precision="20" Scale="2" Nullable="false" />
+    <Property Name="CustomerPhone" Type="String" Nullable="false" />
   </EntityType>
   <EntityType Name="Room">
     <Key>
